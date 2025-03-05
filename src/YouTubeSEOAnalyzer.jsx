@@ -3,7 +3,7 @@ import axios from "axios";
 import "./YT.css";
 
 
-console.log(API_URL);
+
 
 export default function YouTubeSEOAnalyzer() {
   const [videoUrl, setVideoUrl] = useState("");
