@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./YT.css";
-const API_URL = "https://final-seo-ghgo.vercel.app/api/analyze-seo";
+const API_URL = "https://your-backend.vercel.app/api/analyze-seo";
 
 console.log(API_URL);
 
