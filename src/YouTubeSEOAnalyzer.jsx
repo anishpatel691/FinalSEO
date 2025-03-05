@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./YT.css";
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = "https://final-seo-ghgo.vercel.app/api/analyze-seo";
 
 console.log(API_URL);
 
@@ -20,7 +20,9 @@ export default function YouTubeSEOAnalyzer() {
     try {
       console.log("Analyzing SEO for:", videoUrl);
 
-      const response = await axios.post(`https://final-seo-ghgo.vercel.app/api/analyze-seo`, { url: videoUrl });
+      const response = await  axios.post(API_URL, { keyword: "YouTube SEO" }) // ✅ Send data in body
+    .then(response => console.log("Success:", response.data))
+    .catch(error => console.error("Error fetching SEO data:", error));
       setSeoData(response.data);
       console.log("SEO Data:", response.data);
 
