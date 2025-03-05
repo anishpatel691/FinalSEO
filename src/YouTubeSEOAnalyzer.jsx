@@ -20,7 +20,7 @@ export default function YouTubeSEOAnalyzer() {
   try {
       console.log("Analyzing SEO for:", videoUrl);
 
-      const response = await axios.post(`${API_URL}/analyze-seo`, { url: videoUrl });
+      const response = await axios.post(`${API_URL}, { url: videoUrl });
       setSeoData(response.data);
       console.log("SEO Data:", response.data);
 
