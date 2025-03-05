@@ -17,13 +17,12 @@ export default function YouTubeSEOAnalyzer() {
 
   const analyzeSEO = async () => {
     setLoading(true);
-   try {
-    const response = await axios.post(API_URL, { url: videoUrl });
-    console.log("Success:", response.data);
-    setSeoData(response.data);
-} catch (error) {
-    console.error("Error fetching SEO data:", error);
-}
+  try {
+      console.log("Analyzing SEO for:", videoUrl);
+
+      const response = await axios.post(`${API_URL}/analyze-seo`, { url: videoUrl });
+      setSeoData(response.data);
+      console.log("SEO Data:", response.data);
 
 
       const titlesArray = [response.data.optimizedTitles[0]];
