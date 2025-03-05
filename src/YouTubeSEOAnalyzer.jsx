@@ -20,7 +20,7 @@ export default function YouTubeSEOAnalyzer() {
     try {
       console.log("Analyzing SEO for:", videoUrl);
 
-      const response = await  axios.post(API_URL, { keyword: "YouTube SEO" }) // ✅ Send data in body
+      const response = await  axios.post(API_URL) // ✅ Send data in body
     .then(response => console.log("Success:", response.data))
     .catch(error => console.error("Error fetching SEO data:", error));
       setSeoData(response.data);
