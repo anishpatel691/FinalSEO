@@ -18,7 +18,7 @@ export default function YouTubeSEOAnalyzer() {
   const analyzeSEO = async () => {
     setLoading(true);
    try {
-    const response = await axios.post(API_URL, { videoUrl });
+    const response = await axios.post(API_URL, { url: videoUrl });
     console.log("Success:", response.data);
     setSeoData(response.data);
 } catch (error) {
