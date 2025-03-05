@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./YT.css";
-const API_URL = "https://finalseobackend.onrender.com/api/analyze-seo";
+
 
 console.log(API_URL);
 
@@ -19,8 +19,9 @@ export default function YouTubeSEOAnalyzer() {
     setLoading(true);
   try {
       console.log("Analyzing SEO for:", videoUrl);
-
-      const response = await axios.post(`${API_URL}, { url: videoUrl });
+const API_URL = "https://finalseobackend.onrender.com/api/analyze-seo";
+  
+  const response = await axios.post(API_URL, { url: videoUrl });
       setSeoData(response.data);
       console.log("SEO Data:", response.data);
 
