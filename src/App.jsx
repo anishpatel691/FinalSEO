@@ -8,7 +8,7 @@ import YouTubeCaseStudies from "./YouTubeCaseStudies";
 import YouTubeSEOAnalyzer from "./YouTubeSEOAnalyzer";
 import PrivacyPolicy from "./PrivacyPolicy";
 import TermsConditions from "./TermsConditions";
-
+import { Analytics } from "@vercel/analytics/react"
 function App() {
   return (
     <Router>
@@ -27,6 +27,8 @@ function App() {
         </main>
       </div>
       <Footer />
+       {/* Vercel Analytics for tracking */}
+        <Analytics />
     </Router>
   );
 }
