@@ -8,6 +8,8 @@ import YouTubeCaseStudies from "./YouTubeCaseStudies";
 import YouTubeSEOAnalyzer from "./YouTubeSEOAnalyzer";
 import PrivacyPolicy from "./PrivacyPolicy";
 import TermsConditions from "./TermsConditions";
+import AdminSharingPanel from "./AdminSharingPanel";
+import AdminLogin from "./AdminLogin";
 import { Analytics } from "@vercel/analytics/react"
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-conditions" element={<TermsConditions />} />
             <Route path="/youtube-seo-analyzer" element={<YouTubeSEOAnalyzer />} />
+            <Route path="/admin-panel" element={<AdminSharingPanel />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
           </Routes>
         </main>
       </div>
