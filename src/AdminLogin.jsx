@@ -13,7 +13,7 @@ const AdminLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(, { username, password });
+      const res = await axios.post(API_URL, { username, password });
       if (res.data.success) {
         localStorage.setItem("admin-auth", "true");
         localStorage.setItem("admin-auth", "true");
