@@ -8,11 +8,12 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  
+  const API_URL = "https://finalseobackend.onrender.com/api/admin/login";
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/admin/login", { username, password });
+      const res = await axios.post(, { username, password });
       if (res.data.success) {
         localStorage.setItem("admin-auth", "true");
         localStorage.setItem("admin-auth", "true");
