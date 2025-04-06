@@ -44,9 +44,10 @@ const AdminSharingPanel = () => {
     localStorage.removeItem("loginTime");
     navigate("/admin-login");
   };
+  const API_URL = "https://finalseobackend.onrender.com";
 
   const fetchVideos = async () => {
-    const res = await axios.get("/api/admin/videos");
+    const res = await axios.get(`${API_URL}/api/admin/videos`);
     const videos = res.data;
 
     const previousCount = Number(localStorage.getItem("lastVideoCount") || 0);
@@ -61,7 +62,7 @@ const AdminSharingPanel = () => {
 
   const toggleShareStatus = async (id, platform) => {
     try {
-      const res = await axios.patch(`/api/admin/videos/${id}/share`, { platform });
+      const res = await axios.patch(`${API_URL}/api/admin/videos/${id}/share`, { platform });
       const updated = res.data;
       setVideoList(prev => prev.map(v => (v._id === updated._id ? updated : v)));
     } catch (err) {
