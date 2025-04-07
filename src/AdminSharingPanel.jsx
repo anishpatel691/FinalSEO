@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AdminSharingPanel.css";
+
 const API_URL = "https://finalseobackend-1.onrender.com";
 
 const AdminSharingPanel = () => {
@@ -39,7 +40,7 @@ const AdminSharingPanel = () => {
     setAdminName(name);
     setLastLoginTime(lastLogin);
     fetchVideos();
-  }, []);
+  }, [navigate]);
 
   const logout = () => {
     localStorage.removeItem("admin-auth");
@@ -126,75 +127,76 @@ const AdminSharingPanel = () => {
 
   useEffect(() => {
     applyFilter(videoList, filter);
-  }, [filter]);
+  }, [filter, videoList]);
 
-return (
-  <div className="admin-panel">
-    <div className="header">
-      <h2 className="panel-title">📋 Admin Sharing Panel</h2>
-      <div className="admin-info">
-        <p><strong>🕒 Logged In:</strong> {loginDuration}</p>
-        {lastLoginTime && (
-          <p><strong>⏱️ Last Login:</strong> {new Date(lastLoginTime).toLocaleString()}</p>
-        )}
-        <p><strong>👤 Logged in as:</strong> {adminName}</p>
-        <button className="logout-btn" onClick={logout}>🚪 Logout</button>
+  return (
+    <div className="admin-panel">
+      <div className="header">
+        <h2 className="panel-title">📋 Admin Sharing Panel</h2>
+        <div className="admin-info">
+          <p><strong>🕒 Logged In:</strong> {loginDuration}</p>
+          {lastLoginTime && (
+            <p><strong>⏱️ Last Login:</strong> {new Date(lastLoginTime).toLocaleString()}</p>
+          )}
+          <p><strong>👤 Logged in as:</strong> {adminName}</p>
+          <button className="logout-btn" onClick={logout}>🚪 Logout</button>
+        </div>
       </div>
-    </div>
 
-    <div className="filter-controls">
-      <label className="filter-label">Filter by: </label>
-      <select className="filter-select" value={filter} onChange={e => setFilter(e.target.value)}>
-        <option value="all">📃 All</option>
-        <option value="today">🕑 Today</option>
-        <option value="notSharedFacebook">❌ Not shared on Facebook</option>
-        <option value="notSharedInstagram">❌ Not shared on Instagram</option>
-        <option value="notSharedWhatsapp">❌ Not shared on WhatsApp</option>
-        <option value="notSharedTwitter">❌ Not shared on Twitter</option>
-        <option value="completed">✅ Fully Shared</option>
-      </select>
+      <div className="filter-controls">
+        <label className="filter-label">Filter by: </label>
+        <select className="filter-select" value={filter} onChange={e => setFilter(e.target.value)}>
+          <option value="all">📃 All</option>
+          <option value="today">🕑 Today</option>
+          <option value="notSharedFacebook">❌ Not shared on Facebook</option>
+          <option value="notSharedInstagram">❌ Not shared on Instagram</option>
+          <option value="notSharedWhatsapp">❌ Not shared on WhatsApp</option>
+          <option value="notSharedTwitter">❌ Not shared on Twitter</option>
+          <option value="completed">✅ Fully Shared</option>
+        </select>
 
-      <button className="refresh-btn" onClick={fetchVideos}>
-        🔄 Refresh
-      </button>
-    </div>
-
-    {showNotification && (
-      <div className="notification">
-        🚨 New YouTube URL submitted! Please share it.
+        <button className="refresh-btn" onClick={fetchVideos}>
+          🔄 Refresh
+        </button>
       </div>
-    )}
 
-    {loading ? (
-      <p className="loading-message">⏳ Loading videos...</p>
-    ) : filteredVideos.length === 0 ? (
-      <p className="no-results">No video URLs found for this filter.</p>
-    ) : (
-      <ul className="video-list">
-        {filteredVideos.map(({ _id, url, shared }) => (
-          <li key={_id} className="video-item">
-            <div className="video-url">
-              <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
-              <button className="copy-btn" onClick={() => copyToClipboard(url)}>📋 Copy</button>
-            </div>
+      {showNotification && (
+        <div className="notification">
+          🚨 New YouTube URL submitted! Please share it.
+        </div>
+      )}
 
-            <div className="share-controls">
-              {["facebook", "instagram", "whatsapp", "twitter"].map(platform => (
-                <label key={platform} className={`share-checkbox platform-${platform}`}>
-                  <input
-                    type="checkbox"
-                    checked={shared?.[platform]}
-                    onChange={() => toggleShareStatus(_id, platform)}
-                  />
-                  {` ${platform.charAt(0).toUpperCase() + platform.slice(1)}`}
-                </label>
-              ))}
-            </div>
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-);
+      {loading ? (
+        <p className="loading-message">⏳ Loading videos...</p>
+      ) : filteredVideos.length === 0 ? (
+        <p className="no-results">No video URLs found for this filter.</p>
+      ) : (
+        <ul className="video-list">
+          {filteredVideos.map(({ _id, url, shared }) => (
+            <li key={_id} className="video-item">
+              <div className="video-url">
+                <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+                <button className="copy-btn" onClick={() => copyToClipboard(url)}>📋 Copy</button>
+              </div>
+
+              <div className="share-controls">
+                {["facebook", "instagram", "whatsapp", "twitter"].map(platform => (
+                  <label key={platform} className={`share-checkbox platform-${platform}`}>
+                    <input
+                      type="checkbox"
+                      checked={shared?.[platform]}
+                      onChange={() => toggleShareStatus(_id, platform)}
+                    />
+                    {` ${platform.charAt(0).toUpperCase() + platform.slice(1)}`}
+                  </label>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
 
 export default AdminSharingPanel;
