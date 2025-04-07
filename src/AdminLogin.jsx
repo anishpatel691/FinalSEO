@@ -8,7 +8,7 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const API_URL = "https://finalseobackend.onrender.com/api/admin/login";
+  const API_URL = "https://finalseobackend-1.onrender.com/api/admin/login";
 
   const handleLogin = async (e) => {
     e.preventDefault();
