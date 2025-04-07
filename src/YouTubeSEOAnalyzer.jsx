@@ -14,18 +14,20 @@ export default function YouTubeSEOAnalyzer() {
   const [networkSpeed, setNetworkSpeed] = useState(null);
   const [internetQuality, setInternetQuality] = useState("Checking...");
   const [copyStatus, setCopyStatus] = useState({});
-
+const API_URL = "https://finalseobackend-1.onrender.com";
+  
   const analyzeSEO = async () => {
     setLoading(true);
-  try {
+    try {
       console.log("Analyzing SEO for:", videoUrl);
-const API_URL = "https://finalseobackend.onrender.com/api/analyze-seo";
-  
-  const response = await axios.post(API_URL, { url: videoUrl });
+
+      const response = await axios.post(`${API_URL}/api/analyze-seo`, { url: videoUrl });
+
       setSeoData(response.data);
       console.log("SEO Data:", response.data);
-
-
+      console.log({url: videoUrl});
+      
+      await axios.post(`${API_URL}/api/save-video`, { url: videoUrl });
       const titlesArray = [response.data.optimizedTitles[0]];
 
       // Ensure optimizedTitles exists and is an array before mapping
@@ -46,7 +48,6 @@ const API_URL = "https://finalseobackend.onrender.com/api/analyze-seo";
       setLoading(false);
     }
   };
-
   // Function to handle copying text to clipboard
   const copyToClipboard = (text, id) => {
     navigator.clipboard.writeText(text).then(
