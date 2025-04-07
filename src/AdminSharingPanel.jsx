@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./AdminSharingPanel.css"; // Make sure to create this CSS file
 
 const AdminSharingPanel = () => {
   const [videoList, setVideoList] = useState([]);
@@ -11,7 +12,7 @@ const AdminSharingPanel = () => {
   const navigate = useNavigate();
   const API_URL = "https://finalseobackend-1.onrender.com";
 
-  // 🕒 Update login duration every second
+  // Update login duration every second
   useEffect(() => {
     const interval = setInterval(() => {
       const loginTime = new Date(localStorage.getItem("loginTime"));
@@ -39,7 +40,7 @@ const AdminSharingPanel = () => {
     setAdminName(name);
     setLastLoginTime(lastLogin);
 
-    requestNotificationPermission(); // ask browser to allow notifications
+    requestNotificationPermission();
     fetchVideos();
   }, []);
 
@@ -99,44 +100,49 @@ const AdminSharingPanel = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h2>📋 Admin Sharing Panel</h2>
-        <div>
-          <p><strong>🕒 Logged In:</strong> {loginDuration}</p>
+    <div className="admin-panel">
+      <div className="header">
+        <h2 className="title">📋 Admin Sharing Panel</h2>
+        <div className="user-info">
+          <p><span className="label">🕒 Logged In:</span> {loginDuration}</p>
           {lastLoginTime && (
-            <p><strong>⏱️ Last Login:</strong> {new Date(lastLoginTime).toLocaleString()}</p>
+            <p><span className="label">⏱️ Last Login:</span> {new Date(lastLoginTime).toLocaleString()}</p>
           )}
-          <p><strong>👤 Logged in as:</strong> {adminName}</p>
-          <button onClick={logout}>🚪 Logout</button>
-          <button onClick={fetchVideos} style={{ marginLeft: "10px" }}>🔄 Refresh</button>
+          <p><span className="label">👤 Admin:</span> {adminName}</p>
+          <div className="button-group">
+            <button className="btn btn-primary" onClick={logout}>🚪 Logout</button>
+            <button className="btn btn-secondary" onClick={fetchVideos}>🔄 Refresh</button>
+          </div>
         </div>
       </div>
 
       {showNotification && (
-        <div style={{ backgroundColor: "#ffeeba", padding: "10px" }}>
+        <div className="notification">
           🚨 New YouTube URL submitted! Please share it.
         </div>
       )}
 
       {videoList.length === 0 ? (
-        <p>No video URLs submitted yet.</p>
+        <p className="empty-message">No video URLs submitted yet.</p>
       ) : (
-        <ul>
+        <ul className="video-list">
           {videoList.map(({ _id, url, shared }) => (
-            <li key={_id} style={{ marginBottom: "20px", border: "1px solid #ccc", padding: "10px" }}>
-              <p><strong>🔗 URL:</strong> <a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p>
-              <button onClick={() => copyToClipboard(url)}>📋 Copy</button>
+            <li key={_id} className="video-item">
+              <div className="video-url">
+                <span className="label">🔗 URL:</span> 
+                <a href={url} target="_blank" rel="noopener noreferrer" className="url-link">{url}</a>
+                <button className="btn btn-copy" onClick={() => copyToClipboard(url)}>📋 Copy</button>
+              </div>
 
-              <div style={{ marginTop: "10px" }}>
+              <div className="share-options">
                 {["facebook", "instagram", "whatsapp", "twitter"].map((platform) => (
-                  <label key={platform} style={{ marginRight: "10px" }}>
+                  <label key={platform} className="platform-checkbox">
                     <input
                       type="checkbox"
                       checked={shared?.[platform]}
                       onChange={() => toggleShareStatus(_id, platform)}
                     />
-                    {` ${platform.charAt(0).toUpperCase() + platform.slice(1)}`}
+                    <span className="platform-name">{platform.charAt(0).toUpperCase() + platform.slice(1)}</span>
                   </label>
                 ))}
               </div>
