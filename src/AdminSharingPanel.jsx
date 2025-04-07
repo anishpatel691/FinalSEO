@@ -44,7 +44,7 @@ const AdminSharingPanel = () => {
     localStorage.removeItem("loginTime");
     navigate("/admin-login");
   };
-  const API_URL = "https://finalseobackend.onrender.com";
+  const API_URL = "https://finalseobackend-1.onrender.com";
 
   const fetchVideos = async () => {
     const res = await axios.get(`${API_URL}/api/admin/videos`);
