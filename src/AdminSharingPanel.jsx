@@ -2,22 +2,23 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-  const API_URL = "https://finalseobackend-1.onrender.com";
+const API_URL = "https://finalseobackend-1.onrender.com";
 
 const AdminSharingPanel = () => {
   const [videoList, setVideoList] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
   const [adminName, setAdminName] = useState("");
   const [loginDuration, setLoginDuration] = useState("");
-  const navigate = useNavigate();
   const [lastLoginTime, setLastLoginTime] = useState("");
-  // 🕒 Update login duration every minute
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // 🕒 Update login duration every second
   useEffect(() => {
     const interval = setInterval(() => {
       const loginTime = new Date(localStorage.getItem("loginTime"));
       const now = new Date();
       const diffMs = now - loginTime;
-
       const minutes = Math.floor(diffMs / 60000);
       const seconds = Math.floor((diffMs % 60000) / 1000);
       setLoginDuration(`${minutes}m ${seconds}s`);
@@ -48,24 +49,31 @@ const AdminSharingPanel = () => {
   };
 
   const fetchVideos = async () => {
-    const res = await axios.get(`${API_URL}/api/admin/videos`);
-    const videos = res.data;
+    setLoading(true);
+    try {
+      const res = await axios.get(`${API_URL}/api/admin/videos`);
+      const videos = res.data;
 
-    const previousCount = Number(localStorage.getItem("lastVideoCount") || 0);
-    if (videos.length > previousCount) {
-      setShowNotification(true);
-      setTimeout(() => setShowNotification(false), 5000);
+      const previousCount = Number(localStorage.getItem("lastVideoCount") || 0);
+      if (videos.length > previousCount) {
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 5000);
+      }
+      localStorage.setItem("lastVideoCount", videos.length.toString());
+
+      setVideoList(videos);
+    } catch (err) {
+      console.error("Error fetching videos:", err);
+    } finally {
+      setLoading(false);
     }
-    localStorage.setItem("lastVideoCount", videos.length.toString());
-
-    setVideoList(videos);
   };
 
   const toggleShareStatus = async (id, platform) => {
     try {
       const res = await axios.patch(`${API_URL}/api/admin/videos/${id}/share`, { platform });
       const updated = res.data;
-      setVideoList(prev => prev.map(v => (v._id === updated._id ? updated : v)));
+      setVideoList((prev) => prev.map((v) => (v._id === updated._id ? updated : v)));
     } catch (err) {
       console.error("Error updating share status:", err);
     }
@@ -78,29 +86,31 @@ const AdminSharingPanel = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h2>📋 Admin Sharing Panel</h2>
-
         <div>
-        <p><strong>🕒 Logged In:</strong> {loginDuration}</p>
-{lastLoginTime && (
-  <p><strong>⏱️ Last Login:</strong> {new Date(lastLoginTime).toLocaleString()}</p>
-)}
+          <p><strong>🕒 Logged In:</strong> {loginDuration}</p>
+          {lastLoginTime && (
+            <p><strong>⏱️ Last Login:</strong> {new Date(lastLoginTime).toLocaleString()}</p>
+          )}
           <p><strong>👤 Logged in as:</strong> {adminName}</p>
           <button onClick={logout}>🚪 Logout</button>
+          <button onClick={fetchVideos} style={{ marginLeft: "10px" }}>🔄 Refresh</button>
         </div>
       </div>
 
       {showNotification && (
-        <div style={{ backgroundColor: "#ffeeba", padding: "10px" }}>
+        <div style={{ backgroundColor: "#ffeeba", padding: "10px", marginTop: "10px" }}>
           🚨 New YouTube URL submitted! Please share it.
         </div>
       )}
 
-      {videoList.length === 0 ? (
-        <p>No video URLs submitted yet.</p>
+      {loading ? (
+        <p style={{ marginTop: "20px" }}>⏳ Loading videos...</p>
+      ) : videoList.length === 0 ? (
+        <p style={{ marginTop: "20px" }}>No video URLs submitted yet.</p>
       ) : (
-        <ul>
+        <ul style={{ marginTop: "20px" }}>
           {videoList.map(({ _id, url, shared }) => (
             <li key={_id} style={{ marginBottom: "20px", border: "1px solid #ccc", padding: "10px" }}>
               <p><strong>🔗 URL:</strong> <a href={url} target="_blank" rel="noopener noreferrer">{url}</a></p>
